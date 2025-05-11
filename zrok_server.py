@@ -1,27 +1,22 @@
 import subprocess
 import argparse
-from utils import *
+from utils import Zrok
 
-    
+
 def main(token: str):
-    if not is_zrok_installed():
-        install_zrok()
+    zrok = Zrok(token)
+    
+    if not Zrok.is_installed():
+        Zrok.install()
 
-    response = get_zrok_overview(token)
-
-    if response is not None and response['environments'] is not None:
-        kaggle_zid = None
-        for item in response["environments"]:
-            env = item["environment"]
-            if env["description"].lower() == "kaggle":
-                kaggle_zid = env["zId"]
-                break
-                
-        if kaggle_zid:
-            response = delete_zrok_environment(token, kaggle_zid)
-        
-            print("Status Code:", response.status_code)
-            print("Response:", response.text)
+    # Find and delete existing environment
+    env = zrok.find_env("kaggle_server")
+    if env is not None:
+        response = zrok.delete_environment(env["zId"])
+        if response:
+            print("Successfully deleted environment")
+        else:
+            print("Failed to delete environment")
 
     try:
         subprocess.run(["zrok", "disable"], check=True)
@@ -29,7 +24,8 @@ def main(token: str):
         print(e)
         print("zrok already disable")
 
-    subprocess.run(["zrok", "enable", token, "-d", "kaggle"], check=True)
+    zrok.enable("kaggle_server")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Kaggle SSH connection setup')
@@ -40,4 +36,4 @@ if __name__ == "__main__":
     if not token:
         token = input("Enter your zrok API token: ")
 
-    main(token)  
+    main(token)
