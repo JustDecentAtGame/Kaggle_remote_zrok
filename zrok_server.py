@@ -9,9 +9,8 @@ def main(args):
     if not Zrok.is_installed():
         Zrok.install()
 
-    Zrok.disable()
-
-    zrok.enable(args.name)
+    Zrok.disable(args.name)
+    Zrok.enable(args.name)
 
 
 if __name__ == "__main__":
