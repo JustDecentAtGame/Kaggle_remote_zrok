@@ -5,17 +5,17 @@ import argparse
 from utils import Zrok
 
 
-def main(token: str):
-    zrok = Zrok(token)
+def main(args):
+    zrok = Zrok(args.token)
     
     if not Zrok.is_installed():
         Zrok.install()
 
     if not Zrok.is_enabled():
-        zrok.enable("client")
+        zrok.enable(args.name)
 
     # 1. Get zrok share token
-    env = zrok.find_env("kaggle_server")
+    env = zrok.find_env(args.server_name)
     if env is None:
         raise Exception("kaggle environment not found")
 
@@ -69,10 +69,11 @@ UserKnownHostsFile /dev/null""".strip("\n")
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Kaggle SSH connection setup')
     parser.add_argument('--token', help='zrok API token')
+    parser.add_argument('--name', default='kaggle_client', help='Environment name to create (default: kaggle_client)')
+    parser.add_argument('--server-name', default='kaggle_server', help='Server environment name (default: kaggle_server)')
     args = parser.parse_args()
 
-    token = args.token
-    if not token:
-        token = input("Enter your zrok API token: ")
+    if not args.token:
+        args.token = input("Enter your zrok API token: ")
 
-    main(token)  
+    main(args)  
