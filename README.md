@@ -75,7 +75,13 @@ Install [**zrok**](https://docs.zrok.io/docs/guides/install/) and [**vscode**](h
 
 Additionally, you need to install the vscode extension [**Remote-SSH**](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh) to run the **code --remote ssh-remote** command.
 
+Finally, run the zrok_client.py file.
 
+```bash
+python zrok_client.py
+# or 
+python zrok_client.py --token <zrok token>
+```
 
 ## Notice
 - you might want to transfer files around between local and remote, in our case we can use `rsync` for this:
