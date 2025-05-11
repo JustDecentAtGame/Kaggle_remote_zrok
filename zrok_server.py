@@ -9,17 +9,7 @@ def main(args):
     if not Zrok.is_installed():
         Zrok.install()
 
-    # Find and delete existing environment
-    env = zrok.find_env(args.name)
-    if env is not None:
-        zrok.delete_environment(env["zId"])
-
-    # for clear file
-    try:
-        subprocess.run(["zrok", "disable"], check=True)
-    except Exception as e:
-        print(e)
-        print("zrok already disable")
+    Zrok.disable()
 
     zrok.enable(args.name)
 

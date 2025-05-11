@@ -31,7 +31,10 @@ rsync -e "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ~/.
 # from remote to local
 rsync -e "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ~/.ssh/kaggle_rsa -p 9191" root@127.0.0.1:<path_to_the_remote_file> <destination_path_in_local>
 ```
+## Notice
 
+To minimize exceptions, we disable and enable the environment each time we run the code. You can modify this code to work faster, but you will encounter many errors.
+Also, there may be exceptional situations in these operations. In such cases, you should access https://api-v1.zrok.io/ and manually delete the conflicting environments.
 
 # Acknowledgement
 This project is based on [Kaggle_VSCode_Remote_SSH](https://github.com/buidai123/Kaggle_VSCode_Remote_SSH/tree/feat/zrok-integration)

@@ -16,10 +16,9 @@ class Zrok:
         self.base_url = "https://api-v1.zrok.io/api/v1"
 
     def get_env(self):
-        """Get overview of all zrok environments.
-        
-        Makes an API call to fetch information about all environments, including their
-        shares and configurations.
+        """Get overview of all zrok environments using HTTP API.
+
+        This method uses HTTP API to retrieve environments even when zrok enable command fails.
         
         Returns:
             dict: Overview data containing environments information
@@ -176,3 +175,23 @@ class Zrok:
             return False
         except FileNotFoundError:
             return False
+
+    @staticmethod
+    def disable(name: str):
+        """Disable zrok.
+        
+        This function deletes the environment via HTTP communication even if zrok is not enabled,
+        and deletes the ~/.zrok/environment.json file to synchronize with the local environment.
+        """
+
+        # Delete environment via HTTP communication even if zrok is not enabled
+        env = Zrok.find_env(name)
+        if env is not None:
+            Zrok.delete_environment(env["zId"])
+
+        # Delete the ~/.zrok/environment.json file
+        try:
+            subprocess.run(["zrok", "disable"], check=True)
+        except Exception as e:
+            print(e)
+            print("zrok already disable")
