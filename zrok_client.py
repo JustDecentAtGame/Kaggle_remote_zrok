@@ -2,14 +2,17 @@ import os
 import subprocess
 import time
 import argparse
-from utils import get_zrok_overview, delete_zrok_environment
+from utils import *
 
 def main(token: str):
     try:
+        if not is_zrok_installed():
+            install_zrok()
+
         # 1. Get zrok share token
         overview = get_zrok_overview(token)
 
-        if overview is not None:
+        if overview is None:
             raise Exception("zrok API overview error")
 
         share_token = None
