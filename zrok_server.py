@@ -25,7 +25,7 @@ def main(args):
     else:
         subprocess.run(["bash", "setup_ssh.sh"], check=True)
 
-    if args.password:
+    if args.password is not None:
         print(f"Setting password for root user: {args.password}")
         subprocess.run(f"echo 'root:{args.password}' | sudo chpasswd", shell=True, check=True)
     else:
