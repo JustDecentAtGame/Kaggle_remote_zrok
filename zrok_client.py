@@ -41,16 +41,21 @@ def main(args):
 
     # 4. Update SSH config
     config_path = os.path.join(os.environ['USERPROFILE'], '.ssh', 'config')
+    os.makedirs(os.path.dirname(config_path), exist_ok=True)
+    if not os.path.exists(config_path):
+        with open(config_path, 'w', encoding='utf-8') as f:
+            f.write('')
+    
     with open(config_path, 'r', encoding='utf-8') as f:
         content = f.read()
     
     entry = """Host kaggle-local
-HostName 127.0.0.1
-User root
-Port 9191
-IdentityFile ~/.ssh/kaggle_rsa
-StrictHostKeyChecking no
-UserKnownHostsFile /dev/null""".strip("\n")
+    HostName 127.0.0.1
+    User root
+    Port 9191
+    IdentityFile ~/.ssh/kaggle_rsa
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null""".strip("\n")
 
     if "Host kaggle-local" not in content:
         with open(config_path, 'w', encoding='utf-8', newline='') as f:
@@ -59,11 +64,14 @@ UserKnownHostsFile /dev/null""".strip("\n")
         print("SSH config already contains kaggle-local entry")
 
     # 5. Launch VS Code remote-SSH
+    print("Launching VS Code with remote SSH connection...")
     subprocess.Popen(
         ["code", "--remote", "ssh-remote+kaggle-local", "/kaggle/working"],
         shell=True,
-        creationflags=subprocess.CREATE_NEW_CONSOLE
+        creationflags=subprocess.CREATE_NEW_CONSOLE | subprocess.CREATE_NEW_PROCESS_GROUP
     )
+    print("VS Code launched. Please wait for the connection to establish...")
+    time.sleep(5)  # Give some time for VS Code to start
 
 
 if __name__ == "__main__":

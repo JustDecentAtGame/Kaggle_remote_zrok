@@ -67,6 +67,10 @@ Go to the link and click Copy & Edit to copy the notebook.
 
 In Session options, change internet to on and start the session to run the example notebook cells.
 
+For password authentication (no public key):
+- Default password is set to **0**
+- No need to set up SSH keys
+
 This will automatically set up an environment named **kaggle_server**.
 
 ### Step 4 : Setup local machine
