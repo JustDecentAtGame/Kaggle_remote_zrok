@@ -1,30 +1,19 @@
 import os
 import subprocess
 import time
-import re
-import urllib.request
-import json
 import argparse
-
+from utils import get_zrok_overview, delete_zrok_environment
 
 def main(token: str):
     try:
         # 1. Get zrok share token
-        req = urllib.request.Request(
-            url="https://api-v1.zrok.io/api/v1/overview",
-            headers={"x-token": token},
-        )
+        overview = get_zrok_overview(token)
 
-        with urllib.request.urlopen(req) as response:
-            status = response.getcode()
-            data = response.read().decode('utf-8')
-            data = json.loads(data)
-
-        if status != 200:
-            raise Exception("zrok API 응답이 올바르지 않습니다.")
+        if overview is not None:
+            raise Exception("zrok API overview error")
 
         share_token = None
-        for item in data["environments"]:
+        for item in overview["environments"]:
             env = item.get("environment", {})
             if env.get("description") == "kaggle":
                 for share in item.get("shares", []):
@@ -34,7 +23,7 @@ def main(token: str):
                         break
 
         if not share_token:
-            raise Exception("kaggle 환경의 share token을 찾을 수 없습니다.")
+            raise Exception("kaggle environment not found")
 
         # 2. Start zrok process
         print(f"zrok access private {share_token}")
@@ -63,7 +52,7 @@ def main(token: str):
             with open(config_path, 'w', encoding='utf-8', newline='') as f:
                 f.write(content.rstrip("\n") + "\n" + entry)
         else:
-            print("SSH config에 이미 kaggle-local 설정이 존재합니다.")
+            print("SSH config already contains kaggle-local entry")
 
         # 5. Launch VS Code remote-SSH
         subprocess.Popen(
@@ -73,7 +62,7 @@ def main(token: str):
         )
 
     except Exception as e:
-        print(f"오류 발생: {e}")
+        print(e)
         input("Press Enter to exit")
         return
 

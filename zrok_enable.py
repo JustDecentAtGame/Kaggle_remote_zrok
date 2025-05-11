@@ -1,4 +1,4 @@
-import requests
+import urllib.request
 import json
 import subprocess
 import os
@@ -6,7 +6,7 @@ import sys
 import tarfile
 import urllib.request
 import argparse
-
+from utils import get_zrok_overview, delete_zrok_environment
 
 def install_zrok():
     print("Downloading latest zrok release")
@@ -46,28 +46,6 @@ def install_zrok():
         sys.exit(1)
 
 
-def get_zrok_overview(token: str):
-    response = requests.get(
-        url="https://api-v1.zrok.io/api/v1/overview",
-        headers={"x-token": token},
-    )
-    return response.json()
-
-
-def delete_zrok_environment(token: str, zid: str):
-    headers = {
-        "x-token": token,
-        "Accept": "*/*",
-        "Content-Type": "application/zrok.v1+json"
-    }
-    payload = {
-        "identity": zid
-    }
-            
-    response = requests.post("https://api-v1.zrok.io/api/v1/disable", headers=headers, data=json.dumps(payload))
-    return response.json()
-
-
 def main(token: str):
     # First ensure zrok is installed
     try:
@@ -77,7 +55,7 @@ def main(token: str):
 
     response = get_zrok_overview(token)
 
-    if response.status_code == 200:
+    if response is not None:
         json_data = response.json()
         # print(json.dumps(json_data, indent=4))
 
