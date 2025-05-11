@@ -1,4 +1,4 @@
-# Kaggle_zrok
+# Kaggle_remote_zrok
 This project communicates directly over HTTP with zrok’s official web console (API v1) and fully leverages OpenZiti’s dual‐plane architecture:
 
 - Control Plane: A centralized authentication and management service that automatically retrieves and synchronizes user environment data in real time, eliminating repetitive setup tasks.
