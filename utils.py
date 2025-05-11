@@ -55,7 +55,7 @@ class Zrok:
         if overview is None:
             return None
 
-        for item in overview["environments"]:
+        for item in overview:
             env = item["environment"]
             if env["description"].lower() == name.lower():
                 return env
