@@ -58,7 +58,7 @@ class Zrok:
         for item in overview:
             env = item["environment"]
             if env["description"].lower() == name.lower():
-                return env
+                return item
             
         return None
 
@@ -99,6 +99,9 @@ class Zrok:
         
         Args:
             name (str): Name/description for the zrok environment
+            
+        Raises:
+            RuntimeError: If enable command fails
         """
         subprocess.run(["zrok", "enable", self.token, "-d", name], check=True)
 
@@ -151,4 +154,25 @@ class Zrok:
             subprocess.run(["zrok", "version"], check=True)
             return True
         except (subprocess.CalledProcessError, FileNotFoundError):
+            return False
+
+    @staticmethod
+    def is_enabled() -> bool:
+        """Check if zrok is enabled.
+        
+        Returns:
+            bool: True if zrok is enabled (Account Token and Ziti Identity are set), False otherwise
+        """
+        try:
+            result = subprocess.run(
+                ["zrok", "status"],
+                capture_output=True,
+                text=True,
+                check=True
+            )
+            # Check if both Account Token and Ziti Identity are set
+            return "Account Token  <<SET>>" in result.stdout and "Ziti Identity  <<SET>>" in result.stdout
+        except subprocess.CalledProcessError:
+            return False
+        except FileNotFoundError:
             return False

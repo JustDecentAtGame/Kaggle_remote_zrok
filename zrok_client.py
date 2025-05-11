@@ -11,6 +11,9 @@ def main(token: str):
     if not Zrok.is_installed():
         Zrok.install()
 
+    if not Zrok.is_enabled():
+        zrok.enable("client")
+
     # 1. Get zrok share token
     env = zrok.find_env("kaggle_server")
     if env is None:

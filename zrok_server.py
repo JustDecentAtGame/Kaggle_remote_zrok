@@ -10,17 +10,18 @@ def main(token: str):
         Zrok.install()
 
     # Find and delete existing environment
-    env = zrok.find_env("kaggle_server")
+    env = zrok.find_env("server")
     if env is not None:
         zrok.delete_environment(env["zId"])
 
+    # for clear file
     try:
         subprocess.run(["zrok", "disable"], check=True)
     except Exception as e:
         print(e)
         print("zrok already disable")
 
-    zrok.enable("kaggle_server")
+    zrok.enable("server")
 
 
 if __name__ == "__main__":
