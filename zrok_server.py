@@ -4,13 +4,13 @@ from utils import Zrok
 
 
 def main(args):
-    zrok = Zrok(args.token)
+    zrok = Zrok(args.token, args.name)
     
     if not Zrok.is_installed():
         Zrok.install()
 
-    Zrok.disable(args.name)
-    Zrok.enable(args.name)
+    zrok.disable()
+    zrok.enable()
 
 
 if __name__ == "__main__":

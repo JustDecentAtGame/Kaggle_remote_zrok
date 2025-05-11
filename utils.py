@@ -6,13 +6,15 @@ import json
 import subprocess
 
 class Zrok:
-    def __init__(self, token: str):
-        """Initialize Zrok instance with API token.
+    def __init__(self, token: str, name: str = None):
+        """Initialize Zrok instance with API token and optional environment name.
         
         Args:
             token (str): Zrok API token for authentication
+            name (str, optional): Name/description for the zrok environment. Defaults to None.
         """
         self.token = token
+        self.name = name
         self.base_url = "https://api-v1.zrok.io/api/v1"
 
     def get_env(self):
@@ -90,19 +92,51 @@ class Zrok:
 
         return True
 
-    def enable(self, name: str):
+    def enable(self, name: str = None):
         """Enable zrok with the specified environment name.
         
         This method runs the 'zrok enable' command with the provided token and
         environment name. It will create a new environment if one doesn't exist.
         
         Args:
-            name (str): Name/description for the zrok environment
+            name (str, optional): Name/description for the zrok environment.
+                                 If not provided, uses the name from initialization.
             
         Raises:
             RuntimeError: If enable command fails
         """
-        subprocess.run(["zrok", "enable", self.token, "-d", name], check=True)
+        env_name = name if name is not None else self.name
+        if env_name is None:
+            raise ValueError("Environment name must be provided either during initialization or when calling enable()")
+        
+        subprocess.run(["zrok", "enable", self.token, "-d", env_name], check=True)
+
+    def disable(self, name: str = None):
+        """Disable zrok.
+        
+        This function executes the zrok disable command to delete the environment stored in the local file ~/.zrok/environment.json,
+        and additionally removes any environments that could not be deleted through HTTP communication.
+        
+        Args:
+            name (str, optional): Name/description for the zrok environment.
+                                If not provided, uses the name from initialization.
+        """
+        env_name = name if name is not None else self.name
+        if env_name is None:
+            raise ValueError("Environment name must be provided either during initialization or when calling disable()")
+
+        # Delete environment via HTTP communication even if zrok is not enabled
+        env = self.find_env(env_name)
+        if env is not None:
+            self.delete_environment(env["zId"])
+
+        # Delete the ~/.zrok/environment.json file
+        try:
+            subprocess.run(["zrok", "disable"], check=True)
+        except Exception as e:
+            print(e)
+            print("zrok already disable")
+
 
     @staticmethod
     def install():
@@ -176,22 +210,4 @@ class Zrok:
         except FileNotFoundError:
             return False
 
-    @staticmethod
-    def disable(name: str):
-        """Disable zrok.
-        
-        This function deletes the environment via HTTP communication even if zrok is not enabled,
-        and deletes the ~/.zrok/environment.json file to synchronize with the local environment.
-        """
-
-        # Delete environment via HTTP communication even if zrok is not enabled
-        env = Zrok.find_env(name)
-        if env is not None:
-            Zrok.delete_environment(env["zId"])
-
-        # Delete the ~/.zrok/environment.json file
-        try:
-            subprocess.run(["zrok", "disable"], check=True)
-        except Exception as e:
-            print(e)
-            print("zrok already disable")
+  
