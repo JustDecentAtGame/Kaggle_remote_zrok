@@ -69,7 +69,7 @@ UserKnownHostsFile /dev/null""".strip("\n")
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Kaggle SSH connection setup')
     parser.add_argument('--token', help='zrok API token')
-    parser.add_argument('--name', default='kaggle_client1', help='Environment name to create (default: kaggle_client)')
+    parser.add_argument('--name', default='kaggle_client', help='Environment name to create (default: kaggle_client)')
     parser.add_argument('--server_name', default='kaggle_server', help='Server environment name (default: kaggle_server)')
     args = parser.parse_args()
 
