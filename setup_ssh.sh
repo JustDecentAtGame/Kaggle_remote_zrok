@@ -22,21 +22,22 @@ else
     echo "Environment variables file $ENV_VARS_FILE not found"
 fi
 
-if [ "$#" -ne 1 ]; then
-    echo "Usage: ./setup_ssh.sh <authorized_keys_url>"
-    exit 1
-fi
-
+# Make authorized keys URL optional
 AUTH_KEYS_URL=$1
 
 setup_ssh_directory() {
     mkdir -p /kaggle/working/.ssh
-    if wget -qO /kaggle/working/.ssh/authorized_keys "$AUTH_KEYS_URL"; then
-        chmod 700 /kaggle/working/.ssh
-        chmod 600 /kaggle/working/.ssh/authorized_keys
+    if [ ! -z "$AUTH_KEYS_URL" ]; then
+        if wget -qO /kaggle/working/.ssh/authorized_keys "$AUTH_KEYS_URL"; then
+            chmod 700 /kaggle/working/.ssh
+            chmod 600 /kaggle/working/.ssh/authorized_keys
+            echo "Successfully set up authorized keys from $AUTH_KEYS_URL"
+        else
+            echo "Failed to download authorized keys from $AUTH_KEYS_URL"
+            echo "Continuing without authorized keys setup..."
+        fi
     else
-        echo "Failed to download authorized keys from $AUTH_KEYS_URL, please make sure to copy the raw url as said in the docs."
-        exit 1
+        echo "No authorized keys URL provided. Continuing without authorized keys setup..."
     fi
 }
 
@@ -59,7 +60,9 @@ configure_sshd() {
         echo "PermitRootLogin yes"
         echo "PasswordAuthentication yes"
         echo "PubkeyAuthentication yes"
-        echo "AuthorizedKeysFile /kaggle/working/.ssh/authorized_keys"
+        if [ ! -z "$AUTH_KEYS_URL" ]; then
+            echo "AuthorizedKeysFile /kaggle/working/.ssh/authorized_keys"
+        fi
         echo "TCPKeepAlive yes"
         echo "X11Forwarding yes"
         echo "X11DisplayOffset 10"
