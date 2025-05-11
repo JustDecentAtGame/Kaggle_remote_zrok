@@ -71,9 +71,9 @@ This will automatically set up an environment named **kaggle_server**.
 
 ### Step 4 : Setup local machine
 
-Install **zrok** and **vscode** on your local machine. 
+Install [**zrok**](https://docs.zrok.io/docs/guides/install/) and [**vscode**](https://code.visualstudio.com/download) on your local machine. 
 
-Additionally, you need to install the **VSCode Remote-SSH extension** to run the **code --remote ssh-remote** command.
+Additionally, you need to install the vscode extension [**Remote-SSH**](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh) to run the **code --remote ssh-remote** command.
 
 
 
