@@ -7,6 +7,9 @@ This project communicates directly over HTTP with zrok’s official web console 
 
 This allows developers to experience a secure and efficient tunneling environment. The integration with Kaggle via SSH serves merely as one example by adapting the provided code, you can easily extend this advanced approach to other platforms and use cases.
 
+
+
+
 ## zrok compare ngrok
 
 | Feature                | zrok          | ngrok               |
@@ -19,13 +22,21 @@ This allows developers to experience a secure and efficient tunneling environmen
 | Security Model         | Zero Trust Network | VPN-based tunneling |
 | Connection Type	| P2P-first (relay as fallback) | Central relay-based |
 
+
+
+
 ## Setup
 
-### Step 1 : zrok 
+### Step 1 : Zrok 
 Create an account at [zrok](https://zrok.io) and copy your auth token
 
-### Step 2 : Setup SSH 
+### Step 2 : Setup SSH public key authentication (Optional)
 
+<details>
+<summary>
+Click to see how to setup SSH public key authentication
+
+</summary>
 Kaggle notebooks are ephemeral Linux servers, so they don't use public key authentication by default.
 However, you can still choose to use public key authentication if you prefer.
 
@@ -46,6 +57,24 @@ You can provide this URL as the authorized_keys_url argument when running zrok_s
 ```sh
 !python3 zrok_server.py --token <zrok token> --authorized_keys_url <key url>
 ```
+</details>
+
+### Step 3 : Setup Kaggle Notebook
+
+[kaggle-zrok notebook](https://www.kaggle.com/code/kayak0/kaggle-zrok) 
+
+Go to the link and click Copy & Edit to copy the notebook.
+
+In Session options, change internet to on and start the session to run the example notebook cells.
+
+This will automatically set up an environment named **kaggle_server**.
+
+### Step 4 : Setup local machine
+
+Install **zrok** and **vscode** on your local machine. 
+
+Additionally, you need to install the **VSCode Remote-SSH extension** to run the **code --remote ssh-remote** command.
+
 
 
 ## Notice
@@ -60,8 +89,12 @@ rsync -e "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ~/.
 # from remote to local
 rsync -e "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ~/.ssh/kaggle_rsa -p 9191" root@127.0.0.1:<path_to_the_remote_file> <destination_path_in_local>
 ```
-- To minimize exceptions, we disable and enable the environment each time we run the code. You can modify this code to work faster, but you will encounter many errors.
+
+- To minimize exceptions, the environment is disabled and re-enabled each time the code runs. This approach helps maintain stability. The code can be modified to run faster, but doing so may lead to numerous errors.  
 Also, there may be exceptional situations in these operations. In such cases, you should access https://api-v1.zrok.io/ and manually delete the conflicting environments.
+
+
+
 
 # Acknowledgement
 This project is based on [Kaggle_VSCode_Remote_SSH](https://github.com/buidai123/Kaggle_VSCode_Remote_SSH/tree/feat/zrok-integration)
