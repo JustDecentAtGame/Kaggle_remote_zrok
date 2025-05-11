@@ -122,13 +122,6 @@ class Zrok:
                                 If not provided, uses the name from initialization.
         """
         env_name = name if name is not None else self.name
-        if env_name is None:
-            raise ValueError("Environment name must be provided either during initialization or when calling disable()")
-
-        # Delete environment via HTTP communication even if zrok is not enabled
-        env = self.find_env(env_name)
-        if env is not None:
-            self.delete_environment(env["zId"])
 
         # Delete the ~/.zrok/environment.json file
         try:
@@ -137,6 +130,10 @@ class Zrok:
             print(e)
             print("zrok already disable")
 
+        # Delete environment via HTTP communication even if zrok is not enabled
+        env = self.find_env(env_name)
+        if env is not None:
+            self.delete_environment(env['environment']['zId'])
 
     @staticmethod
     def install():
