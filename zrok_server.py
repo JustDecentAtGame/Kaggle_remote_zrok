@@ -12,11 +12,7 @@ def main(token: str):
     # Find and delete existing environment
     env = zrok.find_env("kaggle_server")
     if env is not None:
-        response = zrok.delete_environment(env["zId"])
-        if response:
-            print("Successfully deleted environment")
-        else:
-            print("Failed to delete environment")
+        zrok.delete_environment(env["zId"])
 
     try:
         subprocess.run(["zrok", "disable"], check=True)

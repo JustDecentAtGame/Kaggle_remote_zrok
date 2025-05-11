@@ -87,7 +87,7 @@ class Zrok:
             status = response.getcode()
 
         if status != 200:
-            return False
+            raise Exception("Failed to delete environment")
 
         return True
 
@@ -124,25 +124,19 @@ class Zrok:
                 break
         
         if not download_url:
-            print("Error: Could not find zrok download URL")
-            sys.exit(1)
+            raise FileNotFoundError("Could not find zrok download URL for linux_amd64")
         
         # Download zrok
         urllib.request.urlretrieve(download_url, "zrok.tar.gz")
         
         print("Extracting Zrok")
-        try:
-            with tarfile.open("zrok.tar.gz", "r:gz") as tar:
-                tar.extractall("/usr/local/bin/")
-            os.remove("zrok.tar.gz")
-        except Exception as e:
-            print(f"ERROR: Failed to extract Zrok: {e}")
-            sys.exit(1)
-        
+        with tarfile.open("zrok.tar.gz", "r:gz") as tar:
+            tar.extractall("/usr/local/bin/")
+        os.remove("zrok.tar.gz")
+
         # Check if zrok is installed correctly
         if not Zrok.is_installed():
-            print("ERROR: Failed to install zrok")
-            sys.exit(1)
+            raise RuntimeError("Failed to verify zrok installation")
         
         print("Successfully installed zrok")
 
