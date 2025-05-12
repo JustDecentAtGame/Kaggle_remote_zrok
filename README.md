@@ -81,6 +81,8 @@ Additionally, you need to install the vscode extension [**Remote-SSH**](https://
 
 Finally, run the zrok_client.py file.
 
+When run code in IDEs like VSCode or Cursor, the IDE launches automatically and then closes immediately. Run it in the CLI instead.
+
 ```bash
 python zrok_client.py
 # or 

@@ -43,5 +43,9 @@ if __name__ == "__main__":
 
     if not args.token:
         args.token = input("Enter your zrok API token: ")
-
-    main(args)
+    
+    try:
+        main(args)
+    except Exception as e:
+        print(e)
+        input("An error occurred. Press Enter to exit...")

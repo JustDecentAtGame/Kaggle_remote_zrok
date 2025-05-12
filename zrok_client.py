@@ -17,7 +17,7 @@ def main(args):
     # 1. Get zrok share token
     env = zrok.find_env(args.server_name)
     if env is None:
-        raise Exception("kaggle environment not found")
+        raise Exception("kaggle environment not found. Are you running the Kaggle notebook cells?")
 
     share_token = None
     for share in env.get("shares", []):
@@ -27,7 +27,7 @@ def main(args):
             break
 
     if not share_token:
-        raise Exception("SSH tunnel not found in kaggle environment")
+        raise Exception("SSH tunnel not found in kaggle environment. Are you running the Kaggle notebook cells?")
 
     # 2. Start zrok process
     print(f"zrok access private {share_token}")
@@ -84,4 +84,8 @@ if __name__ == "__main__":
     if not args.token:
         args.token = input("Enter your zrok API token: ")
 
-    main(args)  
+    try:
+        main(args)
+    except Exception as e:
+        print(e)
+        input("An error occurred. Press Enter to exit...")

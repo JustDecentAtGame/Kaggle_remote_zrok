@@ -4,6 +4,7 @@ import sys
 import tarfile
 import json
 import subprocess
+import platform
 
 class Zrok:
     def __init__(self, token: str, name: str = None):
@@ -144,6 +145,11 @@ class Zrok:
         2. Extracts the binary to /usr/local/bin/
         3. Verifies the installation
         """
+        # Check if running on Windows
+        if platform.system() != 'Linux':
+            raise Exception("This script only works on Linux. For other operating systems, \
+                            please install zrok manually following the instructions at https://docs.zrok.io/docs/guides/install/")
+
         print("Downloading latest zrok release")
         # Get latest release info
         response = urllib.request.urlopen("https://api.github.com/repos/openziti/zrok/releases/latest")
