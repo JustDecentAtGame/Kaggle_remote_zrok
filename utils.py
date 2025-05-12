@@ -14,6 +14,9 @@ class Zrok:
             token (str): Zrok API token for authentication
             name (str, optional): Name/description for the zrok environment. Defaults to None.
         """
+        if token.startswith('<') and token.endswith('>'):
+            raise ValueError("Please provide an actual your zrok token")
+        
         self.token = token
         self.name = name
         self.base_url = "https://api-v1.zrok.io/api/v1"
