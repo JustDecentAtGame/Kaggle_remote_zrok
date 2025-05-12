@@ -35,10 +35,10 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Kaggle SSH connection setup')
-    parser.add_argument('--token', help='zrok API token')
-    parser.add_argument('--name', default='kaggle_server', help='Environment name to create (default: kaggle_server)')
-    parser.add_argument('--authorized_keys_url', help='URL to authorized_keys file')
-    parser.add_argument('--password', default=None, help='Password for root user, if not provided, a random password will be generated')
+    parser.add_argument('--token', type=str, help='zrok API token')
+    parser.add_argument('--name', type=str, default='kaggle_server', help='Environment name to create (default: kaggle_server)')
+    parser.add_argument('--authorized_keys_url', type=str, help='URL to authorized_keys file')
+    parser.add_argument('--password', type=str, help='Password for root user, if not provided, a random password will be generated')
     args = parser.parse_args()
 
     if not args.token:
