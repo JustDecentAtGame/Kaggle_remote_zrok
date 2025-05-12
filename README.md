@@ -1,5 +1,9 @@
 # Kaggle_remote_zrok
-This project communicates directly over HTTP with zrok’s official web console (API v1) and fully leverages OpenZiti’s dual‐plane architecture:
+This repository enables you to leverage Kaggle’s free weekly 30-hour allocations of GPU accelerators (T4×2, P100) and TPU VMs (v3-8) in a full-fledged programming environment—namely, Visual Studio Code—via SSH. Furthermore, by using zrok’s 5 GB/day tunnel service, it overcomes the typical 1 GB/month limitation of ngrok’s free tier.
+
+Although Kaggle offers a generous 30 hours per week of various accelerators at no cost, its native Jupyter Notebook environment is not ideal for full-scale development. Since Kaggle notebooks essentially run on Linux servers, you can SSH into them from your local machine and work in your preferred IDE, such as VS Code. However, because Kaggle notebooks don’t support standard port forwarding, you need a tunneling tool like ngrok or zrok. This repository automates private, secure tunnel setup using zrok—avoiding the restrictions of ngrok’s free plan.
+
+The solution directly interacts with the Zrok official web console (API V1) over HTTP and fully exploits OpenZiti’s dual-plane architecture for secure, high-performance connectivity:
 
 - Control Plane: A centralized authentication and management service that automatically retrieves and synchronizes user environment data in real time, eliminating repetitive setup tasks.
 
