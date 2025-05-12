@@ -10,6 +10,9 @@ def generate_random_password(length=16):
 
 
 def main(args):
+    if args.token.startswith('<') and args.token.endswith('>'):
+        raise ValueError("Please provide an actual your zrok token")
+
     zrok = Zrok(args.token, args.name)
     
     if not Zrok.is_installed():
