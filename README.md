@@ -28,7 +28,12 @@ This allows developers to experience a secure and efficient tunneling environmen
 ## Setup
 
 ### Step 1 : Zrok 
-Create an account at [zrok](https://zrok.io) and copy your auth token
+Create an account at [zrok](https://zrok.io) and copy your auth token. Please checkout [docs](https://docs.zrok.io/docs/getting-started/#enabling-your-zrok-environment)
+
+> [!NOTE]
+>
+> remember to change your account to starter plan that way you can use NetFoundry's public zrok instance.
+
 
 ### Step 2 : Setup SSH public key authentication (Optional)
 
